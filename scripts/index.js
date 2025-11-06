@@ -1,10 +1,18 @@
+import { generateRandomPosition, generateRandomRGBColor } from "./utils.js";
+
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const size = 30;
 const defaultPosition = { x: 270, y: 270 };
 
-let direction;
+const food = {
+  x: generateRandomPosition(canvas.width, size),
+  y: generateRandomPosition(canvas.height, size),
+  color: generateRandomRGBColor(),
+};
+
+let direction, loopId;
 let snake = [defaultPosition];
 
 const drawSnake = () => {
@@ -19,7 +27,7 @@ const drawSnake = () => {
   }
 }
 
-const moveSnake = (direction) => {
+const moveSnake = () => {
   const head = { ...snake[snake.length - 1] };
 
   switch (direction) {
@@ -51,14 +59,28 @@ const drawGrid = () => {
   }
 }
 
-const gameLoop = () => {
-  setInterval(() => {
-    ctx.clearRect(0, 0, 600, 600);
-    drawGrid();
+const drawFood = () => {
+  const { x, y, color } = food
 
-    moveSnake(direction);
-    drawSnake();
-  }, 200);
+  ctx.shadowColor = color
+  ctx.shadowBlur = 6
+  ctx.fillStyle = color
+  ctx.fillRect(x, y, size, size)
+  ctx.shadowBlur = 0
+}
+
+const gameLoop = () => {
+  clearInterval(loopId)
+
+  ctx.clearRect(0, 0, 600, 600);
+  drawGrid();
+  drawFood();
+  moveSnake();
+  drawSnake();
+
+  loopId = setTimeout(() => {
+    gameLoop()
+  }, 300)
 }
 
 document.addEventListener('keydown', (event) => {
