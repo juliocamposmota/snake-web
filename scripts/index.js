@@ -1,4 +1,5 @@
-const ctx = document.getElementById('canvas').getContext('2d');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
 const size = 30;
 const defaultPosition = { x: 270, y: 270 };
@@ -32,12 +33,32 @@ const moveSnake = (direction) => {
   snake.shift();
 }
 
+const drawGrid = () => {
+  ctx.strokeStyle = "#232323";
+
+  for (let x = 0; x < canvas.width; x += size) {
+    ctx.beginPath();
+    ctx.moveTo(x, 600);
+    ctx.lineTo(x, 0);
+    ctx.stroke();
+  }
+
+  for (let y = 0; y < canvas.width; y += size) {
+    ctx.beginPath();
+    ctx.moveTo(600, y);
+    ctx.lineTo(0, y);
+    ctx.stroke();
+  }
+}
+
 const gameLoop = () => {
   setInterval(() => {
     ctx.clearRect(0, 0, 600, 600);
+    drawGrid();
+
     moveSnake(direction);
     drawSnake();
-  }, 100);
+  }, 200);
 }
 
 document.addEventListener('keydown', (event) => {
