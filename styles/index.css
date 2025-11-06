@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background-color: #232323;
 }
 
 body {
@@ -13,5 +14,5 @@ body {
 }
 
 #canvas {
-  background-color: red;
+  background-color: #191919;
 }
