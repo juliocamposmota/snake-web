@@ -40,8 +40,12 @@ const moveSnake = (direction) => {
   snake.shift();
 }
 
-setInterval(() => {
-  ctx.clearRect(0, 0, 600, 600);
-  moveSnake(direction);
-  drawSnake();
-}, 100);
+const gameLoop = () => {
+  setInterval(() => {
+    ctx.clearRect(0, 0, 600, 600);
+    moveSnake(direction);
+    drawSnake();
+  }, 100);
+}
+
+gameLoop();
