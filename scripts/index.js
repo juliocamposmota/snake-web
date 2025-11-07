@@ -26,6 +26,7 @@ const food = {
   points: 10,
 };
 
+let gameLoopTimeout = 300;
 let isRunning = false;
 let snake = [defaultPosition];
 let canChangeDirection = true;
@@ -36,7 +37,7 @@ const startGame = () => {
   isRunning = true;
   direction = undefined;
   nextDirection = undefined;
-  loopId = setTimeout(gameLoop, 50);
+  loopId = setTimeout(gameLoop, gameLoopTimeout);
 };
 
 const drawSnake = () => {
@@ -115,6 +116,10 @@ const eatFood = () => {
     audio.play();
     score.textContent = Number(score.textContent) + food.points
 
+    if (gameLoopTimeout > 20) {
+      gameLoopTimeout -= 20;
+    }
+
     generateFood();
   }
 }
@@ -143,6 +148,7 @@ const handlePlayAgain = () => {
   nextDirection = undefined;
   score.textContent = '0';
   menu.style.display = 'none';
+  gameLoopTimeout = 300;
 
   generateFood();
   startGame();
@@ -169,7 +175,7 @@ const gameLoop = () => {
   }
 
   canChangeDirection = true;
-  if (isRunning) loopId = setTimeout(gameLoop, 50);
+  if (isRunning) loopId = setTimeout(gameLoop, gameLoopTimeout);
 };
 
 const gameOver = () => {
