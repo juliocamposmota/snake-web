@@ -18,9 +18,18 @@ const food = {
   points: 10,
 };
 
-let direction, nextDirection, loopId;
+let isRunning = false;
 let snake = [defaultPosition];
 let canChangeDirection = true;
+let direction, nextDirection, loopId;
+
+const startGame = () => {
+  if (isRunning) return;
+  isRunning = true;
+  direction = undefined;
+  nextDirection = undefined;
+  loopId = setTimeout(gameLoop, 50);
+};
 
 const drawSnake = () => {
   ctx.fillStyle = "#999999";
@@ -121,32 +130,53 @@ const handlePlayAgain = () => {
   nextDirection = undefined;
   score.textContent = '0';
   menu.style.display = 'none';
+
+  food.x = generateRandomPosition(canvas.width, size);
+  food.y = generateRandomPosition(canvas.height, size);
+  food.color = generateRandomRGBColor();
+
+  startGame();
 };
 
 const gameLoop = () => {
-  clearTimeout(loopId);
-  direction = nextDirection;
+  if (!isRunning) return;
+  if (nextDirection) direction = nextDirection;
 
-  ctx.clearRect(0, 0, 600, 600);
+  if (loopId) {
+    clearTimeout(loopId);
+    loopId = null;
+  }
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawGrid();
   drawFood();
   drawSnake();
-  moveSnake();
-  checkCollision();
-  eatFood();
+
+  if (direction) {
+    moveSnake();
+    checkCollision();
+    eatFood();
+  }
 
   canChangeDirection = true;
-  loopId = setTimeout(gameLoop, 50);
+  if (isRunning) loopId = setTimeout(gameLoop, 50);
 };
 
 const gameOver = () => {
+  isRunning = false;
   direction = undefined;
   nextDirection = undefined;
+
+  if (loopId) {
+    clearTimeout(loopId);
+    loopId = undefined;
+  }
+
   menu.style.display = 'flex';
   menuScore.textContent = score.textContent;
 };
 
-gameLoop();
+startGame();
 
 document.addEventListener('keydown', ({ key }) => {
   if (key === "Enter") {
