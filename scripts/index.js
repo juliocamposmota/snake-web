@@ -85,6 +85,20 @@ const drawFood = () => {
   ctx.shadowBlur = 0
 }
 
+const generateFood = () => {
+  let x = generateRandomPosition(canvas.width, size);
+  let y = generateRandomPosition(canvas.height, size);
+
+  while (snake.some(segment => segment.x === x && segment.y === y)) {
+    x = generateRandomPosition(canvas.width, size);
+    y = generateRandomPosition(canvas.height, size);
+  }
+
+  food.x = x;
+  food.y = y;
+  food.color = generateRandomRGBColor();
+};
+
 const eatFood = () => {
   const head = snake[snake.length - 1];
 
@@ -93,17 +107,7 @@ const eatFood = () => {
     audio.play();
     score.textContent = Number(score.textContent) + food.points
 
-    let x = generateRandomPosition(canvas.width, size);
-    let y = generateRandomPosition(canvas.height, size);
-
-    while (snake.some(segment => segment.x === x && segment.y === y)) {
-      x = generateRandomPosition(canvas.width, size);
-      y = generateRandomPosition(canvas.height, size);
-    }
-
-    food.x = x;
-    food.y = y;
-    food.color = generateRandomRGBColor();
+    generateFood();
   }
 }
 
@@ -131,10 +135,7 @@ const handlePlayAgain = () => {
   score.textContent = '0';
   menu.style.display = 'none';
 
-  food.x = generateRandomPosition(canvas.width, size);
-  food.y = generateRandomPosition(canvas.height, size);
-  food.color = generateRandomRGBColor();
-
+  generateFood();
   startGame();
 };
 
