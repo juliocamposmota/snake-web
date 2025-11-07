@@ -1,12 +1,15 @@
 import { generateRandomPosition, generateRandomRGBColor } from "./utils.js";
 
-const audio = new Audio("../assets/eat.mp3");
 const score = document.querySelector('.score-value');
 const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+const playButton = document.querySelector('.button-play');
+const menu = document.querySelector('.menu');
+const menuScore = document.querySelector('.menu-score-value');
 
 const size = 30;
+const ctx = canvas.getContext('2d');
 const defaultPosition = { x: 270, y: 270 };
+const audio = new Audio("../assets/eat.mp3");
 
 const food = {
   x: generateRandomPosition(canvas.width, size),
@@ -108,31 +111,49 @@ const checkCollision = () => {
   }))
 
   if (wallCollision || selfCollision) {
-    alert("Game Over! You hit the wall or yourself.");
-    snake = [defaultPosition];
-    direction = null;
+    gameOver();
   }
 }
 
+const handlePlayAgain = () => {
+  snake = [defaultPosition];
+  direction = undefined;
+  nextDirection = undefined;
+  score.textContent = '0';
+  menu.style.display = 'none';
+};
+
 const gameLoop = () => {
+  clearTimeout(loopId);
   direction = nextDirection;
-  clearInterval(loopId);
 
   ctx.clearRect(0, 0, 600, 600);
   drawGrid();
   drawFood();
-  moveSnake();
   drawSnake();
-  eatFood();
+  moveSnake();
   checkCollision();
+  eatFood();
 
   canChangeDirection = true;
-  loopId = setTimeout(() => {
-    gameLoop();
-  }, 300);
+  loopId = setTimeout(gameLoop, 50);
 };
 
+const gameOver = () => {
+  direction = undefined;
+  nextDirection = undefined;
+  menu.style.display = 'flex';
+  menuScore.textContent = score.textContent;
+};
+
+gameLoop();
+
 document.addEventListener('keydown', ({ key }) => {
+  if (key === "Enter") {
+    handlePlayAgain();
+    return;
+  }
+
   if (!canChangeDirection) return;
 
   if (key == "ArrowRight" && direction != "LEFT") nextDirection  = "RIGHT";
@@ -143,4 +164,4 @@ document.addEventListener('keydown', ({ key }) => {
   canChangeDirection = false;
 })
 
-gameLoop();
+playButton.addEventListener('click', handlePlayAgain);
