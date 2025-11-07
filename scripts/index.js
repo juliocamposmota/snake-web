@@ -1,5 +1,6 @@
 import { generateRandomPosition, generateRandomRGBColor } from "./utils.js";
 
+const audio = new Audio("../assets/eat.mp3");
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
@@ -69,6 +70,27 @@ const drawFood = () => {
   ctx.shadowBlur = 0
 }
 
+const eatFood = () => {
+  const head = snake[snake.length - 1];
+
+  if (head.x === food.x && head.y === food.y) {
+    snake.push(head);
+    audio.play();
+
+    let x = generateRandomPosition(canvas.width, size);
+    let y = generateRandomPosition(canvas.height, size);
+
+    while (snake.some(segment => segment.x === x && segment.y === y)) {
+      x = generateRandomPosition(canvas.width, size);
+      y = generateRandomPosition(canvas.height, size);
+    }
+
+    food.x = x;
+    food.y = y;
+    food.color = generateRandomRGBColor();
+  }
+}
+
 const gameLoop = () => {
   clearInterval(loopId)
 
@@ -77,6 +99,7 @@ const gameLoop = () => {
   drawFood();
   moveSnake();
   drawSnake();
+  eatFood();
 
   loopId = setTimeout(() => {
     gameLoop()
