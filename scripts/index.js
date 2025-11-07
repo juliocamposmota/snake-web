@@ -1,6 +1,7 @@
 import { generateRandomPosition, generateRandomRGBColor } from "./utils.js";
 
 const audio = new Audio("../assets/eat.mp3");
+const score = document.querySelector('.score-value');
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
@@ -11,6 +12,7 @@ const food = {
   x: generateRandomPosition(canvas.width, size),
   y: generateRandomPosition(canvas.height, size),
   color: generateRandomRGBColor(),
+  points: 10,
 };
 
 let direction, nextDirection, loopId;
@@ -77,6 +79,7 @@ const eatFood = () => {
   if (head.x === food.x && head.y === food.y) {
     snake.push(head);
     audio.play();
+    score.textContent = Number(score.textContent) + food.points
 
     let x = generateRandomPosition(canvas.width, size);
     let y = generateRandomPosition(canvas.height, size);
