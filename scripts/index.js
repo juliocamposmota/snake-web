@@ -13,8 +13,9 @@ const food = {
   color: generateRandomRGBColor(),
 };
 
-let direction, loopId;
+let direction, nextDirection, loopId;
 let snake = [defaultPosition];
+let canChangeDirection = true;
 
 const drawSnake = () => {
   ctx.fillStyle = "#999999";
@@ -91,8 +92,28 @@ const eatFood = () => {
   }
 }
 
+const checkCollision = () => {
+  const head = snake[snake.length - 1];
+  const canvasLimit = canvas.width - size;
+  const neckIndex = snake.length - 2;
+
+  const wallCollision =
+    head.x < 0 || head.x > canvasLimit || head.y < 0 || head.y > canvasLimit;
+
+  const selfCollision = snake.find(((segment, index) =>{
+    return index < neckIndex && segment.x === head.x && segment.y === head.y
+  }))
+
+  if (wallCollision || selfCollision) {
+    alert("Game Over! You hit the wall or yourself.");
+    snake = [defaultPosition];
+    direction = null;
+  }
+}
+
 const gameLoop = () => {
-  clearInterval(loopId)
+  direction = nextDirection;
+  clearInterval(loopId);
 
   ctx.clearRect(0, 0, 600, 600);
   drawGrid();
@@ -100,17 +121,23 @@ const gameLoop = () => {
   moveSnake();
   drawSnake();
   eatFood();
+  checkCollision();
 
+  canChangeDirection = true;
   loopId = setTimeout(() => {
-    gameLoop()
-  }, 300)
-}
+    gameLoop();
+  }, 300);
+};
 
 document.addEventListener('keydown', ({ key }) => {
-  if (key == "ArrowRight" && direction != "LEFT") direction = "RIGHT"
-  if (key == "ArrowLeft" && direction != "RIGHT") direction = "LEFT"
-  if (key == "ArrowDown" && direction != "UP") direction = "DOWN"
-  if (key == "ArrowUp" && direction != "DOWN") direction = "UP"
+  if (!canChangeDirection) return;
+
+  if (key == "ArrowRight" && direction != "LEFT") nextDirection  = "RIGHT";
+  if (key == "ArrowLeft" && direction != "RIGHT") nextDirection  = "LEFT";
+  if (key == "ArrowDown" && direction != "UP") nextDirection  = "DOWN";
+  if (key == "ArrowUp" && direction != "DOWN") nextDirection  = "UP";
+
+  canChangeDirection = false;
 })
 
 gameLoop();
