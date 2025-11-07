@@ -1,15 +1,23 @@
 import { generateRandomPosition, generateRandomRGBColor } from "./utils.js";
 
-const score = document.querySelector('.score-value');
-const canvas = document.getElementById('canvas');
-const playButton = document.querySelector('.button-play');
 const menu = document.querySelector('.menu');
+const canvas = document.getElementById('canvas');
+const score = document.querySelector('.score-value');
+const playButton = document.querySelector('.button-play');
 const menuScore = document.querySelector('.menu-score-value');
+const mobileButtonUp = document.querySelector('.btn-control.up');
+const mobileButtonDown = document.querySelector('.btn-control.down');
+const mobileButtonLeft = document.querySelector('.btn-control.left');
+const mobileButtonRight = document.querySelector('.btn-control.right');
 
 const size = 30;
 const ctx = canvas.getContext('2d');
-const defaultPosition = { x: 270, y: 270 };
 const audio = new Audio("../assets/eat.mp3");
+
+const defaultPosition = {
+  x: Math.floor((canvas.width / size) / 2) * size,
+  y: Math.floor((canvas.height / size) / 2) * size,
+};
 
 const food = {
   x: generateRandomPosition(canvas.width, size),
@@ -69,7 +77,7 @@ const drawGrid = () => {
 
   for (let y = 0; y < canvas.height; y += size) {
     ctx.beginPath();
-    ctx.moveTo(canvas.height, y);
+    ctx.moveTo(canvas.width, y);
     ctx.lineTo(0, y);
     ctx.stroke();
   }
@@ -193,6 +201,22 @@ document.addEventListener('keydown', ({ key }) => {
 
   canChangeDirection = false;
 })
+
+mobileButtonUp.addEventListener('click', () => {
+  if (direction !== 'DOWN') nextDirection = 'UP';
+});
+
+mobileButtonDown.addEventListener('click', () => {
+  if (direction !== 'UP') nextDirection = 'DOWN';
+});
+
+mobileButtonLeft.addEventListener('click', () => {
+  if (direction !== 'RIGHT') nextDirection = 'LEFT';
+});
+
+mobileButtonRight.addEventListener('click', () => {
+  if (direction !== 'LEFT') nextDirection = 'RIGHT';
+});
 
 playButton.addEventListener('click', handlePlayAgain);
 

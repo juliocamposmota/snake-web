@@ -3,8 +3,8 @@ export const generateRandomNumber = (min, max) => {
 };
 
 export const generateRandomPosition = (max, size) => {
-  const number = generateRandomNumber(0, canvas.width - size);
-  return Math.round(number / 30) * 30;
+  const number = generateRandomNumber(0, max - size);
+  return Math.round(number / size) * size;
 };
 
 export const generateRandomRGBColor = () => {
