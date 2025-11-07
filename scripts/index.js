@@ -106,14 +106,11 @@ const gameLoop = () => {
   }, 300)
 }
 
-document.addEventListener('keydown', (event) => {
-  switch (event.key) {
-    case 'ArrowUp': direction = 'UP'; break;
-    case 'ArrowDown': direction = 'DOWN'; break;
-    case 'ArrowLeft': direction = 'LEFT'; break;
-    case 'ArrowRight': direction = 'RIGHT'; break;
-    default: break;
-  }
+document.addEventListener('keydown', ({ key }) => {
+  if (key == "ArrowRight" && direction != "LEFT") direction = "RIGHT"
+  if (key == "ArrowLeft" && direction != "RIGHT") direction = "LEFT"
+  if (key == "ArrowDown" && direction != "UP") direction = "DOWN"
+  if (key == "ArrowUp" && direction != "DOWN") direction = "UP"
 })
 
 gameLoop();
