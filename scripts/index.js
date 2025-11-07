@@ -62,14 +62,14 @@ const drawGrid = () => {
 
   for (let x = 0; x < canvas.width; x += size) {
     ctx.beginPath();
-    ctx.moveTo(x, 600);
+    ctx.moveTo(x, canvas.height);
     ctx.lineTo(x, 0);
     ctx.stroke();
   }
 
-  for (let y = 0; y < canvas.width; y += size) {
+  for (let y = 0; y < canvas.height; y += size) {
     ctx.beginPath();
-    ctx.moveTo(600, y);
+    ctx.moveTo(canvas.height, y);
     ctx.lineTo(0, y);
     ctx.stroke();
   }
@@ -113,17 +113,18 @@ const eatFood = () => {
 
 const checkCollision = () => {
   const head = snake[snake.length - 1];
-  const canvasLimit = canvas.width - size;
+  const horizontalLimit = canvas.width - size;
+  const verticalLimit = canvas.height - size;
   const neckIndex = snake.length - 2;
 
-  const wallCollision =
-    head.x < 0 || head.x > canvasLimit || head.y < 0 || head.y > canvasLimit;
+  const horizontalCollision = head.x < 0 || head.x > horizontalLimit;
+  const verticalCollision = head.y < 0 || head.y > verticalLimit;
 
   const selfCollision = snake.find(((segment, index) =>{
     return index < neckIndex && segment.x === head.x && segment.y === head.y
   }))
 
-  if (wallCollision || selfCollision) {
+  if (horizontalCollision || verticalCollision || selfCollision) {
     gameOver();
   }
 }
@@ -177,8 +178,6 @@ const gameOver = () => {
   menuScore.textContent = score.textContent;
 };
 
-startGame();
-
 document.addEventListener('keydown', ({ key }) => {
   if (key === "Enter") {
     handlePlayAgain();
@@ -196,3 +195,5 @@ document.addEventListener('keydown', ({ key }) => {
 })
 
 playButton.addEventListener('click', handlePlayAgain);
+
+startGame();

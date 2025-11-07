@@ -16,31 +16,55 @@ body {
 
 #canvas {
   background-color: #191919;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
 .score {
   color: #ffffff;
-  font-size: 24px;
+  font-size: clamp(10px, 2vw, 18px);
   font-weight: bold;
+}
+
+.score-value {
+  font-size: clamp(16px, 3vw, 24px);
 }
 
 .menu {
   gap: 15px;
   padding: 5%;
-  display: none;
+  display: flex;
   color: #ffffff;
   position: absolute;
   text-align: center;
   border-radius: 10px;
   align-items: center;
   flex-direction: column;
+  background-color: rgba(23, 23, 23, 0.84);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.menu-title {
+  font-size: clamp(18px, 5vw, 28px);
+  font-weight: bold;
+}
+
+.menu span {
+  background-color: rgba(23, 23, 23, 0.84);
+  font-size: clamp(14px, 4vw, 20px);
 }
 
 .button-play {
   background-color: #d1d1d1;
-  font-size: 16px;
+  font-size: clamp(14px, 4vw, 18px);
   font-weight: bold;
   color: #232323;
   border-radius: 5px;
-  padding: 8px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.button-play:hover {
+  background-color: #ffffff;
 }
