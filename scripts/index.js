@@ -209,18 +209,22 @@ document.addEventListener('keydown', ({ key }) => {
 })
 
 mobileButtonUp.addEventListener('click', () => {
+  if (!canChangeDirection) return;
   if (direction !== 'DOWN') nextDirection = 'UP';
 });
 
 mobileButtonDown.addEventListener('click', () => {
+  if (!canChangeDirection) return;
   if (direction !== 'UP') nextDirection = 'DOWN';
 });
 
 mobileButtonLeft.addEventListener('click', () => {
+  if (!canChangeDirection) return;
   if (direction !== 'RIGHT') nextDirection = 'LEFT';
 });
 
 mobileButtonRight.addEventListener('click', () => {
+  if (!canChangeDirection) return;
   if (direction !== 'LEFT') nextDirection = 'RIGHT';
 });
 
