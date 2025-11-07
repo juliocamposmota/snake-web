@@ -33,7 +33,7 @@ body {
 .menu {
   gap: 15px;
   padding: 5%;
-  display: flex;
+  display: none;
   color: #ffffff;
   position: absolute;
   text-align: center;
