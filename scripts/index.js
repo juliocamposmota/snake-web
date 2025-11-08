@@ -12,7 +12,9 @@ const mobileButtonRight = document.querySelector('.btn-control.right');
 
 const size = 30;
 const ctx = canvas.getContext('2d');
-const audio = new Audio("../assets/eat.mp3");
+const eatAudio = new Audio("../assets/eat.mp3");
+const gameOverAudio = new Audio("../assets/game-over.mp3");
+const startGameAudio = new Audio("../assets/start-game.mp3");
 
 const defaultPosition = {
   x: Math.floor((canvas.width / size) / 2) * size,
@@ -35,6 +37,7 @@ let direction, nextDirection, loopId;
 
 const startGame = () => {
   if (isRunning) return;
+  startGameAudio.play();
   isRunning = true;
   direction = undefined;
   nextDirection = undefined;
@@ -114,7 +117,7 @@ const eatFood = () => {
 
   if (head.x === food.x && head.y === food.y) {
     snake.push(head);
-    audio.play();
+    eatAudio.play();
     score.textContent = Number(score.textContent) + food.points
 
     if (gameSpeed > 20) {
@@ -181,6 +184,7 @@ const gameLoop = (timestamp) => {
 };
 
 const gameOver = () => {
+  gameOverAudio.play();
   isRunning = false;
   direction = undefined;
   nextDirection = undefined;
