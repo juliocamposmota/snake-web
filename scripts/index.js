@@ -26,8 +26,9 @@ const food = {
   points: 10,
 };
 
-let gameLoopTimeout = 300;
 let isRunning = false;
+let lastFrameTime = 0;
+let gameSpeed = 300;
 let snake = [defaultPosition];
 let canChangeDirection = true;
 let direction, nextDirection, loopId;
@@ -37,7 +38,7 @@ const startGame = () => {
   isRunning = true;
   direction = undefined;
   nextDirection = undefined;
-  loopId = setTimeout(gameLoop, gameLoopTimeout);
+  requestAnimationFrame(gameLoop);
 };
 
 const drawSnake = () => {
@@ -116,8 +117,8 @@ const eatFood = () => {
     audio.play();
     score.textContent = Number(score.textContent) + food.points
 
-    if (gameLoopTimeout > 20) {
-      gameLoopTimeout -= 20;
+    if (gameSpeed > 20) {
+      gameSpeed -= 20;
     }
 
     generateFood();
@@ -148,34 +149,35 @@ const handlePlayAgain = () => {
   nextDirection = undefined;
   score.textContent = '0';
   menu.style.display = 'none';
-  gameLoopTimeout = 300;
+  gameSpeed = 300;
 
   generateFood();
   startGame();
 };
 
-const gameLoop = () => {
+const gameLoop = (timestamp) => {
   if (!isRunning) return;
-  if (nextDirection) direction = nextDirection;
+  if (!lastFrameTime) lastFrameTime = timestamp;
 
-  if (loopId) {
-    clearTimeout(loopId);
-    loopId = null;
-  }
+  const delta = timestamp - lastFrameTime;
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawGrid();
-  drawFood();
-  drawSnake();
+  if (delta > gameSpeed) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawGrid();
+    drawFood();
+    drawSnake();
 
-  if (direction) {
+    if (nextDirection) direction = nextDirection;
+
     moveSnake();
     checkCollision();
     eatFood();
+
+    canChangeDirection = true;
+    lastFrameTime = timestamp;
   }
 
-  canChangeDirection = true;
-  if (isRunning) loopId = setTimeout(gameLoop, gameLoopTimeout);
+  loopId = requestAnimationFrame(gameLoop);
 };
 
 const gameOver = () => {
@@ -184,7 +186,7 @@ const gameOver = () => {
   nextDirection = undefined;
 
   if (loopId) {
-    clearTimeout(loopId);
+    cancelAnimationFrame(loopId);
     loopId = undefined;
   }
 
