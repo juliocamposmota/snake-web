@@ -208,24 +208,28 @@ document.addEventListener('keydown', ({ key }) => {
   canChangeDirection = false;
 })
 
-mobileButtonUp.addEventListener('click', () => {
+mobileButtonUp.addEventListener('pointerdown', () => {
   if (!canChangeDirection) return;
   if (direction !== 'DOWN') nextDirection = 'UP';
+  canChangeDirection = false;
 });
 
-mobileButtonDown.addEventListener('click', () => {
+mobileButtonDown.addEventListener('pointerdown', () => {
   if (!canChangeDirection) return;
   if (direction !== 'UP') nextDirection = 'DOWN';
+  canChangeDirection = false;
 });
 
-mobileButtonLeft.addEventListener('click', () => {
+mobileButtonLeft.addEventListener('pointerdown', () => {
   if (!canChangeDirection) return;
   if (direction !== 'RIGHT') nextDirection = 'LEFT';
+  canChangeDirection = false;
 });
 
-mobileButtonRight.addEventListener('click', () => {
+mobileButtonRight.addEventListener('pointerdown', () => {
   if (!canChangeDirection) return;
   if (direction !== 'LEFT') nextDirection = 'RIGHT';
+  canChangeDirection = false;
 });
 
 playButton.addEventListener('click', handlePlayAgain);
