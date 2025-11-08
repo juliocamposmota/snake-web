@@ -7,9 +7,6 @@ const resizeCanvas = () => {
   
   canvas.width = width;
   canvas.height = height;
-
-  console.log('canvas.width', Math.floor((canvas.width / 30) / 2) * 30);
-  console.log('canvas.height', Math.floor(canvas.height / 30));
 };
 
 window.addEventListener('resize', resizeCanvas);

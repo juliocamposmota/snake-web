@@ -5,6 +5,7 @@ const canvas = document.getElementById('canvas');
 const score = document.querySelector('.score-value');
 const playButton = document.querySelector('.button-play');
 const menuScore = document.querySelector('.menu-score-value');
+const menuRecord = document.querySelector('.menu-score-record');
 const mobileButtonUp = document.querySelector('.btn-control.up');
 const mobileButtonDown = document.querySelector('.btn-control.down');
 const mobileButtonLeft = document.querySelector('.btn-control.left');
@@ -37,7 +38,6 @@ let direction, nextDirection, loopId;
 
 const startGame = () => {
   if (isRunning) return;
-  startGameAudio.play();
   isRunning = true;
   direction = undefined;
   nextDirection = undefined;
@@ -147,6 +147,7 @@ const checkCollision = () => {
 }
 
 const handlePlayAgain = () => {
+  startGameAudio.play();
   snake = [defaultPosition];
   direction = undefined;
   nextDirection = undefined;
@@ -194,7 +195,16 @@ const gameOver = () => {
     loopId = undefined;
   }
 
+  const currentRecord = localStorage.getItem('julay-snake-record') || 0;
+
+  if (Number(score.textContent) > Number(currentRecord)) {
+    localStorage.setItem('julay-snake-record', score.textContent);
+  }
+
+  const newRecord = localStorage.getItem('julay-snake-record') || 0;
+
   menu.style.display = 'flex';
+  menuRecord.textContent = newRecord;
   menuScore.textContent = score.textContent;
 };
 
